@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package Common;
+
+service RpcService {
+    rpc TestConnection(Empty) returns (Empty) {}
+    rpc ExecuteCommand(CommandRequest) returns (CommandResponse) {}
+}
+
+message CommandRequest {
+    string command = 1;
+	string argumentsJsonContent = 2;
+}
+
+message CommandResponse {
+    bool hasError = 1;
+	string errorMessage = 2;
+	string resultJsonContent = 3;
+}
+
+message Empty {}
