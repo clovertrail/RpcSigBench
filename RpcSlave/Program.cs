@@ -3,6 +3,8 @@ using Common;
 using Grpc.Core;
 using RpcSlave;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace RpcMaster
 {
@@ -23,8 +25,11 @@ namespace RpcMaster
             };
             server.Start();
             Console.WriteLine($"Server [{slaveArgs.HostName}:{slaveArgs.Port}] started");
+            Console.WriteLine("Press any key to stop the server...");
+            Console.ReadKey();
 
             server.ShutdownAsync().Wait();
+            Task.Delay(Timeout.Infinite).Wait();
         }
 
         private static SlaveArgs ParseArgs(string[] args)

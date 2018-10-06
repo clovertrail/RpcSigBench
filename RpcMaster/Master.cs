@@ -20,6 +20,7 @@ namespace RpcMaster
 
         public Master(Args args)
         {
+            //Console.WriteLine($"{GetType().Name}");
             _args = args;
             var agents = new List<string>(args.AgentList.Split(';'));
             _channels = CreateChannels(agents, args.Port);
@@ -31,7 +32,6 @@ namespace RpcMaster
             _module = LoadModule();
             if (_module == null)
                 return false;
-            _clients = CreateRpcConnections(_channels);
             _connectedAgents = CreateConnectedAgents(_clients);
             string content = null;
             using (StreamReader sr = new StreamReader(_args.ModuleConfigFile))
@@ -63,7 +63,8 @@ namespace RpcMaster
         private IModule LoadModule()
         {
             var moduleName = _args.ModuleName;
-            var module = Factory.Create<IModule>(moduleName);
+            var ns = _args.ModuleNamespace;
+            var module = Factory.Create<IModule>(ns, moduleName);
             return module;
         }
 
@@ -72,6 +73,7 @@ namespace RpcMaster
             var channels = new List<Channel>(agents.Count);
             for (var i = 0; i < agents.Count; i++)
             {
+                Console.WriteLine($"add {agents[i]}:{rpcPort}");
                 channels.Add(new Channel($"{agents[i]}:{rpcPort}", ChannelCredentials.Insecure,
                     new ChannelOption[] {
                         // For Group, the received message size is very large, so here set 8000k
@@ -115,8 +117,9 @@ namespace RpcMaster
                         {
                             client.TestConnection(empty);
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
+                            Console.WriteLine($"Fail to connect for {e.Message}");
                             throw;
                         }
                     }

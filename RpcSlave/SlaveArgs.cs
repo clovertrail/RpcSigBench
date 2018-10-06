@@ -7,10 +7,10 @@ namespace RpcSlave
 {
     class SlaveArgs
     {
-        [Option('d', "hostName", Default = "0.0.0.0", Required = false, HelpText = "Specify host name")]
+        [Option('d', "hostName", Default = "localhost", Required = false, HelpText = "Specify host name")]
         public string HostName { get; set; }
 
-        [Option("port", Default = 7000, Required = false, HelpText = "Specify the remote agent port")]
+        [Option("port", Default = 5001, Required = false, HelpText = "Specify the remote agent port")]
         public int Port { get; set; }
     }
 }
