@@ -17,6 +17,7 @@ namespace RpcMaster
         private IModule _module;
         private Args _args;
         private AbstractOptions _moduleConfigOptions;
+        private PluginManager<IModule> _pluginManager;
 
         public Master(Args args)
         {
@@ -62,9 +63,9 @@ namespace RpcMaster
 
         private IModule LoadModule()
         {
-            var moduleName = _args.ModuleName;
-            var ns = _args.ModuleNamespace;
-            var module = Factory.Create<IModule>(ns, moduleName);
+            _pluginManager = new PluginManager<IModule>(_args.DllFolder);
+            var moduleFullName = _args.ModuleFullName;
+            var module = _pluginManager.Create(moduleFullName);
             return module;
         }
 

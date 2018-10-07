@@ -1,1 +1,1 @@
-dotnet run -- --agentList="localhost" --moduleName="ASRSMaster" --moduleNamespace="ASRSMaster" --moduleConfigFile="ASRSMaster.config"
+dotnet run -- --agentList="localhost" --moduleFullName="ASRSMaster.ASRSMaster" --dllFolder="C:\home\Work\DevDiv\RpcSigBench\ASRSMaster\bin\Debug\netstandard2.0" --moduleConfigFile="ASRSMaster.config"
