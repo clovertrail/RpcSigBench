@@ -8,8 +8,9 @@ service RpcService {
 }
 
 message CommandRequest {
-    string command = 1;
-	string argumentsJsonContent = 2;
+    string fullModuleName = 1;
+    string command = 2;
+	string argumentsJsonContent = 3;
 }
 
 message CommandResponse {

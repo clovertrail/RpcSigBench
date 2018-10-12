@@ -10,10 +10,12 @@ namespace RpcMaster
     public class AgentImpl : IAgent
     {
         private RpcServiceClient _client;
+        private string _moduleFullName;
 
-        public AgentImpl(RpcServiceClient client)
+        public AgentImpl(RpcServiceClient client, string moduleFullName)
         {
             _client = client;
+            _moduleFullName = moduleFullName;
         }
 
         public void ExecuteCommand(string command, AbstractArguments arguments)
@@ -21,6 +23,7 @@ namespace RpcMaster
             var jsonStr = Newtonsoft.Json.JsonConvert.SerializeObject(arguments);
             var commandRequest = new CommandRequest()
             {
+                FullModuleName = _moduleFullName,
                 Command = command,
                 ArgumentsJsonContent = jsonStr
             };

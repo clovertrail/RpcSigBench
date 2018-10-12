@@ -33,7 +33,7 @@ namespace RpcMaster
             _module = LoadModule();
             if (_module == null)
                 return false;
-            _connectedAgents = CreateConnectedAgents(_clients);
+            _connectedAgents = CreateConnectedAgents(_clients, _module.GetType().FullName);
             string content = null;
             using (StreamReader sr = new StreamReader(_args.ModuleConfigFile))
             {
@@ -84,12 +84,12 @@ namespace RpcMaster
             return channels;
         }
 
-        private static List<IAgent> CreateConnectedAgents(List<RpcService.RpcServiceClient> agentConnections)
+        private static List<IAgent> CreateConnectedAgents(List<RpcService.RpcServiceClient> agentConnections, string moduleFullName)
         {
             var connectedAgents = new List<IAgent>(agentConnections.Count);
             foreach (var agentConnection in agentConnections)
             {
-                connectedAgents.Add(new AgentImpl(agentConnection));
+                connectedAgents.Add(new AgentImpl(agentConnection, moduleFullName));
             }
             return connectedAgents;
         }

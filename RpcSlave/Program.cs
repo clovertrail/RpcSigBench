@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using Common;
 using Grpc.Core;
+using RpcCommon;
 using RpcSlave;
 using System;
 using System.Threading;
@@ -14,13 +15,16 @@ namespace RpcMaster
         {
             Console.WriteLine("MachineName: {0}", Environment.MachineName);
             var slaveArgs = ParseArgs(args);
+            if (slaveArgs == null)
+                return;
+            var pluginManager = new PluginManager(slaveArgs.DllFolder);
             var server = new Server(new ChannelOption[]
             {
                 // For Group, the received message size is very large, so here set 8000k
                 new ChannelOption(ChannelOptions.MaxReceiveMessageLength, 8192000)
             })
             {
-                Services = { RpcService.BindService(new RpcServiceImpl()) },
+                Services = { RpcService.BindService(new RpcServiceImpl(pluginManager, slaveArgs.ModuleFullName)) },
                 Ports = { new ServerPort(slaveArgs.HostName, slaveArgs.Port, ServerCredentials.Insecure) }
             };
             server.Start();
